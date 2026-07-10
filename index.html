@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calcul Heure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<section class="ch" id="calcul">
+  <div class="ch-wrap">
+
+    <!-- ================= FORM / RESULT (same slot) ================= -->
+    <div class="ch-hero">
+      <div class="ch-hero-intro" id="chIntro">
+        <p class="ch-hero-lead">Commencez votre calcul heure dès maintenant et suivez vos heures de travail quotidiennes, hebdomadaires ou mensuelles avec précision.</p>
+        <p class="ch-hero-tag">Calculateur en direct</p>
+        <p class="ch-hero-sub">Résultats instantanés en heures, minutes et décimales</p>
+      </div>
+
+      <div class="ch-card" id="chForm">
+        <span class="ch-block-label">Mode de calcul</span>
+        <div class="ch-modes" role="tablist" aria-label="Mode de calcul">
+          <button type="button" class="ch-mode is-active" data-mode="quotidien" role="tab" aria-selected="true">Quotidien</button>
+          <button type="button" class="ch-mode" data-mode="hebdomadaire" role="tab" aria-selected="false">Hebdomadaire</button>
+          <button type="button" class="ch-mode" data-mode="mensuel" role="tab" aria-selected="false">Mensuel</button>
+        </div>
+
+        <div class="ch-grid2">
+          <div class="ch-field">
+            <label class="ch-label" for="chStart">Heure de début</label>
+            <input type="time" id="chStart" class="ch-input" value="09:00">
+          </div>
+          <div class="ch-field">
+            <label class="ch-label" for="chEnd">Heure de fin</label>
+            <input type="time" id="chEnd" class="ch-input" value="17:30">
+          </div>
+        </div>
+
+        <div class="ch-grid2">
+          <div class="ch-field">
+            <label class="ch-label" for="chBreak">Pause (minutes)</label>
+            <input type="number" id="chBreak" class="ch-input" value="60" min="0" max="1440" step="5" inputmode="numeric">
+          </div>
+          <div class="ch-field" id="chDaysField" hidden>
+            <label class="ch-label" for="chDays" id="chDaysLabel">Jours ouvrables / mois</label>
+            <input type="number" id="chDays" class="ch-input" value="22" min="1" max="31" step="1" inputmode="numeric">
+          </div>
+          <div class="ch-field" id="chWeekField" hidden>
+            <label class="ch-label" for="chWeekDays">Jours ouvrables / semaine</label>
+            <input type="number" id="chWeekDays" class="ch-input" value="5" min="1" max="7" step="1" inputmode="numeric">
+          </div>
+        </div>
+
+        <label class="ch-check" id="chOvernightWrap">
+          <input type="checkbox" id="chOvernight"><span>La journée se termine après minuit</span>
+        </label>
+        <p class="ch-hint">Format 24 heures recommandé pour des résultats précis.</p>
+
+        <p class="ch-error" id="chError" role="alert"></p>
+        <button type="button" class="ch-calc" id="chCalc">Calculer</button>
+      </div>
+
+      <div class="ch-result" id="chResult" hidden>
+      <div class="ch-res-head">
+        <span class="ch-res-ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 7v5l3 2"/></svg>
+        </span>
+        <div>
+          <h2 class="ch-res-title">Résultat du calcul</h2>
+          <p class="ch-res-desc" id="chResDesc">Temps de travail effectif</p>
+        </div>
+        <span class="ch-res-badge" id="chResBadge">Quotidien</span>
+      </div>
+
+      <div class="ch-hero-num">
+        <span class="ch-hero-num-main" id="chMain">0h 00m</span>
+        <span class="ch-hero-num-cap" id="chMainCap">de travail effectif</span>
+      </div>
+
+      <div class="ch-stats" id="chStats"></div>
+
+      <div class="ch-overtime" id="chOvertime" hidden></div>
+
+      <p class="ch-amplitude" id="chAmplitude"></p>
+
+      <div class="ch-actions">
+        <button type="button" class="ch-btn ch-btn--wa" id="chWa">
+          <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm5.6 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5-4.5-.2-.2-1.2-1.6-1.2-3s.8-2.1 1-2.4c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2 0 .4-.1.5l-.3.4-.3.3c-.1.1-.2.3 0 .5.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.2.1.4.1.5-.1l.7-.9c.2-.2.3-.2.5-.1l2 .9c.3.1.4.2.5.3.1.2.1.8-.1 1.6z"/></svg>
+          WhatsApp
+        </button>
+        <button type="button" class="ch-btn ch-btn--ghost" id="chShare">
+          <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M18 8a3 3 0 1 0-2.8-4L8.9 7.6a3 3 0 1 0 0 4.8l6.3 3.6A3 3 0 1 0 18 16"/></svg>
+          Partager
+        </button>
+        <button type="button" class="ch-btn ch-btn--pdf" id="chPdf">
+          <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3v11m0 0 4-4m-4 4-4-4M5 19h14"/></svg>
+          PDF
+        </button>
+      </div>
+
+      <button type="button" class="ch-recalc" id="chNew">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 4v6h6M20 20v-6h-6M5 19a9 9 0 0 0 14-2M19 5a9 9 0 0 0-14 2"/></svg>
+        Recalculer
+      </button>
+      <p class="ch-toast" id="chToast" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+<script src="script.js" defer></script>
+</body>
+</html>
