@@ -11,12 +11,13 @@
     var h = Math.floor(mins / 60), m = mins % 60;
     return h + "h " + (m < 10 ? "0" + m : m) + "m";
   }
-  function hms(mins) {
-    mins = Math.max(0, Math.round(mins));
-    var h = Math.floor(mins / 60), m = mins % 60;
-    return (h < 10 ? "0" + h : h) + ":" + (m < 10 ? "0" + m : m) + ":00";
+  function dec(mins) {
+    return (Math.max(0, mins) / 60).toFixed(2).replace(".", ",");
   }
-  function dec(mins) { return (mins / 60).toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function clock(mins) {
+    var h = Math.floor(mins / 60), m = mins % 60;
+    return (h < 10 ? "0" + h : h) + ":" + (m < 10 ? "0" + m : m);
+  }
   function nf(v, d) { return v.toLocaleString("fr-FR", { minimumFractionDigits: d || 0, maximumFractionDigits: d == null ? 2 : d }); }
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
 
@@ -114,7 +115,7 @@
     // main figure = période nette
     $("chMain").textContent = hm(s.periodNet);
     $("chMainCap").textContent = "de travail effectif (" + s.periodLabel + ")";
-    $("chResDesc").textContent = hms(s.periodNet) + "  ·  " + dec(s.periodNet) + " h décimales";
+    $("chResDesc").textContent = hm(s.periodNet) + "  ·  " + dec(s.periodNet) + " h décimales";
 
     var stats = [
       ["Travail effectif / jour", hm(s.net)],
@@ -164,15 +165,13 @@
   function shareText() {
     if (!state) return "";
     var s = state, l = ["Calcul Heure — " + { quotidien: "Quotidien", hebdomadaire: "Hebdomadaire", mensuel: "Mensuel" }[s.mode]];
-    l.push("Horaire : " + hms2(s.start) + " → " + hms2(s.end) + (s.wrapped ? " (après minuit)" : "") + " · pause " + s.brk + " min");
+    l.push("Horaire : " + clock(s.start) + " → " + clock(s.end) + (s.wrapped ? " (après minuit)" : "") + " · pause " + s.brk + " min");
     l.push("Travail effectif / jour : " + hm(s.net) + " (" + dec(s.net) + " h)");
     if (s.mode !== "quotidien") l.push("Total " + s.periodLabel + " : " + hm(s.periodNet) + " (" + dec(s.periodNet) + " h)");
     if (s.overtime) l.push("Heures sup : " + hm(s.overtime.supMin) + " (+25 % : " + hm(s.overtime.t25) + ", +50 % : " + hm(s.overtime.t50) + ")");
     l.push("", "Calculez : " + SITE);
     return l.join("\n");
   }
-  function hms2(mins) { var h = Math.floor(mins / 60), m = mins % 60; return (h < 10 ? "0" + h : h) + ":" + (m < 10 ? "0" + m : m); }
-
   $("chWa").addEventListener("click", function () {
     if (!state) return;
     window.open("https://wa.me/?text=" + encodeURIComponent(shareText()), "_blank", "noopener");
@@ -211,7 +210,7 @@
     doc.text("Calcul Heure", cx, 40, { align: "center" });
     doc.setTextColor(210, 220, 232).setFont("helvetica", "normal").setFontSize(10);
     doc.text(ascii("Mode " + { quotidien: "Quotidien", hebdomadaire: "Hebdomadaire", mensuel: "Mensuel" }[s.mode] +
-      "  |  " + hms2(s.start) + " -> " + hms2(s.end) + "  |  pause " + s.brk + " min"), cx, 62, { align: "center" });
+      "  |  " + clock(s.start) + " -> " + clock(s.end) + "  |  pause " + s.brk + " min"), cx, 62, { align: "center" });
 
     var y = 130;
     doc.setFont("helvetica", "bold").setFontSize(28).setTextColor(11, 21, 36);
